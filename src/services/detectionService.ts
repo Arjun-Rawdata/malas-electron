@@ -1,4 +1,3 @@
-import baseStore from "../store/baseStore";
 import useCamCapture from "./camCapture";
 import {
   FilesetResolver,
@@ -7,20 +6,19 @@ import {
 } from "@mediapipe/tasks-vision";
 import { useEffect, useRef, useState } from "react";
 import { CanvasRefType, VideoRefType } from "../utils/types";
+import baseStore from "../store/baseStore";
 
 function useDetectionService() {
   const { captureImage } = useCamCapture();
-  const issWarningActive = baseStore((state) => state.isWarningActive);
-
-  const isWarningActiveRef = useRef(false);
+  const setIsWarningActive = baseStore((state) => state.setIsWarningActive);
   const visionRef = useRef<any>(null);
   const recognizerRef = useRef<GestureRecognizer | null>(null);
 
-  const [isFaceDetected, setIsFaceDetected] = useState(false);
-  const [isThumbUpDetected, setIsThumbUpDetected] = useState(false);
-
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const [isFaceDetected, setIsFaceDetected] = useState(false);
+  const [isThumbUpDetected, setIsThumbUpDetected] = useState(false);
 
   const setRef = (newVideoRef: VideoRefType, newCanvasRef: CanvasRefType) => {
     videoRef.current = newVideoRef.current;
@@ -34,7 +32,7 @@ function useDetectionService() {
       );
       visionRef.current = vision;
     };
-    isWarningActiveRef.current = issWarningActive;
+
     initializeVision();
 
     return () => {
@@ -48,8 +46,7 @@ function useDetectionService() {
     let lastVideoTime = -1;
     const detector = await FaceDetector.createFromOptions(visionRef.current, {
       baseOptions: {
-        modelAssetPath:
-          "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+        modelAssetPath: "mediapipeModels/blaze_face_short_range.tflite",
       },
       runningMode: "VIDEO",
     });
@@ -71,11 +68,13 @@ function useDetectionService() {
           ) {
             if (detectedFaces.detections[1].categories[0].score > 0.8) {
               console.log("Multiple faces detected:", detectedFaces.detections);
+              setIsWarningActive(true);
               setIsFaceDetected(false);
               setIsThumbUpDetected(false);
             }
           } else if (detectedFaces.detections.length == 1) {
             if (detectedFaces.detections[0].categories[0].score > 0.8) {
+              setIsWarningActive(false);
               setIsFaceDetected(true);
             }
           } else {
@@ -102,8 +101,7 @@ function useDetectionService() {
         visionRef.current,
         {
           baseOptions: {
-            modelAssetPath:
-              "https://storage.googleapis.com/mediapipe-tasks/gesture_recognizer/gesture_recognizer.task",
+            modelAssetPath: "mediapipeModels/gesture_recognizer.task",
           },
           numHands: 2,
         }
@@ -118,9 +116,9 @@ function useDetectionService() {
         let lastTimestamp = 0;
 
         function assignTimestamp() {
-          const currentTimestamp = performance.now();
+          const currentTimestamp = performance.now(); // or video.currentTime * 1000
           if (currentTimestamp <= lastTimestamp) {
-            lastTimestamp += 1;
+            lastTimestamp += 1; // Increment by 1ms if timestamps are stagnant
           } else {
             lastTimestamp = currentTimestamp;
           }
@@ -130,6 +128,9 @@ function useDetectionService() {
         const timestamp = assignTimestamp();
 
         if (video && recognizerRef.current) {
+          // const currentTime = video.currentTime;
+          // const timestamp = currentTime * 1000;
+
           const result = recognizerRef.current.recognizeForVideo(
             video,
             timestamp
@@ -140,8 +141,9 @@ function useDetectionService() {
               gestureArray.forEach((gesture) => {
                 if (gesture.categoryName === "Thumb_Up") {
                   console.log("Thumbs up detected!");
-
-                  setIsThumbUpDetected(true);
+                  if (isThumbUpDetected == false) {
+                    setIsThumbUpDetected(true);
+                  }
                 } else {
                   setIsThumbUpDetected(false);
                 }
@@ -162,8 +164,13 @@ function useDetectionService() {
     if (isFaceDetected && isThumbUpDetected) {
       console.log("capturing...");
       captureImage(canvasRef, videoRef);
+      setTimeout(()=>{
+
+        setIsThumbUpDetected(false);
+        setIsFaceDetected(false);
+      },6000)
+    } else {
       setIsThumbUpDetected(false);
-      setIsFaceDetected(false);
     }
   }, [isFaceDetected, isThumbUpDetected, captureImage]);
 

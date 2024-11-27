@@ -24,7 +24,7 @@ const Register = () => {
           </div>
           <div className="w-full grid place-items-center absolute -bottom-14 z-10 space-y-[42px]">
             <p className="text-center font-[400] text-[40px] text-primary">
-              Kindly visit the Registration desk if you want to edit the mobile
+              Kindly visit Registration desk if you want to edit the mobile
               no./Mail ID
             </p>
             <Button

@@ -1,9 +1,10 @@
+import { request } from "@/utils/axios";
 import Button from "../components/Button";
 import userStore from "../store/userStore";
 import { icon } from "../utils/assets";
 import { cn } from "../utils/cn";
 import { useEffect } from "react";
-import axios from "../services/axios";
+
 import { useNavigate } from "react-router-dom";
 
 const Print = () => {
@@ -19,7 +20,7 @@ const Print = () => {
         qrcode: user?.qrcode,
         image: image,
       };
-      const response = await axios.post(
+      const response = await request.post(
         "/fruit-land/fruit_land_api/pic_a_pic/save_image_picapic.php",
         userDat
       );
