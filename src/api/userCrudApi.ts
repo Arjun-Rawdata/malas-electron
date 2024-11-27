@@ -6,8 +6,8 @@ type HttpMethod = "get" | "post";
 export const userCrudApi = async <T>(
   method: HttpMethod,
 
-  qrCode?: number,
-  scannerId?: number
+  qrCode: number,
+  scannerId: number
 ): Promise<T> => {
   let url = "/get-malas-profile/";
   const params = {
