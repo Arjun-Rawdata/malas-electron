@@ -2,20 +2,22 @@ import ArrowBtn from "../components/ArrowBtn";
 import LogoHeader from "../components/LogoHeader";
 import { icon } from "../utils/assets";
 import { useEffect, useState } from "react";
-import axios from "../services/axios";
 import themeStore from "../store/themeStore";
 import userStore from "../store/userStore";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import Warn from "../components/Warn";
+import { userCrudApi } from "@/api/userCrudApi";
+import useUserCrudService from "@/services/userCrudService";
+
 
 const Page = () => {
-  const { setTheme } = themeStore((state) => state);
-  const { setUser } = userStore((state) => state);
+
   const [qrCode, setQrCode] = useState<string | null>(null);
   const navigate = useNavigate();
   const fruits = ["kiwi", "strawberry", "mango", "orange"];
   const [isScanErr, setIsScanErr] = useState(false);
+  const {getUserDetails}=useUserCrudService()
 
   useEffect(() => {
     const socket = io("ws://localhost:3001", {
@@ -47,37 +49,9 @@ const Page = () => {
   }, [qrCode]);
 
   useEffect(() => {
-    getUser();
+    getUserDetails()
   }, [qrCode]);
 
-  const getUser = async () => {
-    if (!qrCode) {
-      return;
-    }
-    const postData = {
-      action: "get_userdetails_bycode",
-      qrcode: Number(qrCode),
-      scanner_id: "101",
-    };
-    try {
-      const response = await axios.post(
-        "/fruit-land/fruit_land_api/quiz/api_controller.php",
-        postData
-      );
-      const userDat = response?.data?.data?.[0];
-      if (!fruits.includes(userDat?.fruit)) {
-        setIsScanError();
-        return;
-      }
-      setUser({ ...userDat, qrcode: qrCode });
-      setTheme(userDat?.fruit);
-      console.log("userDat", userDat);
-      navigate("/measures");
-    } catch (error) {
-      console.error("Error sending message:", error);
-      setIsScanError();
-    }
-  };
 
   const setIsScanError = () => {
     setIsScanErr(true);

@@ -11,7 +11,6 @@ const CountDown = () => {
     const intervalId = setInterval(() => {
       setCount((prevCount) => {
         if (prevCount === 1) {
-          clearInterval(intervalId);
           setIsCountDown(false);
           navigate("/preview");
           return 0;
