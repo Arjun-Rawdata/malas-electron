@@ -10,14 +10,12 @@ import Warn from "../components/Warn";
 import { userCrudApi } from "@/api/userCrudApi";
 import useUserCrudService from "@/services/userCrudService";
 
-
 const Page = () => {
-
   const [qrCode, setQrCode] = useState<string | null>(null);
   const navigate = useNavigate();
   const fruits = ["kiwi", "strawberry", "mango", "orange"];
   const [isScanErr, setIsScanErr] = useState(false);
-  const {getUserDetails}=useUserCrudService()
+  const { getUserDetails } = useUserCrudService();
 
   useEffect(() => {
     const socket = io("ws://localhost:3001", {
@@ -49,9 +47,8 @@ const Page = () => {
   }, [qrCode]);
 
   useEffect(() => {
-    getUserDetails()
+    getUserDetails(qrCode as string, 101);
   }, [qrCode]);
-
 
   const setIsScanError = () => {
     setIsScanErr(true);
