@@ -7,14 +7,14 @@ function useUserCrudService() {
   const { setTheme } = themeStore((state) => state);
   const { setUser } = userStore((state) => state);
 
-  const getUserDetails = () => {
-    const getUser = async (qrCode: number,scannerId:number) => {
+  const getUserDetails = async (qrCode: string|number,scannerId:number) => {
+    
       if (!qrCode) {
         return;
       }
 
       try {
-        const data = await userCrudApi("post", qrCode, scannerId);
+        const data = await userCrudApi("post", Number(qrCode), scannerId);
         console.log(data);
 
         // const userDat = data?.data?.[0];
@@ -29,7 +29,7 @@ function useUserCrudService() {
       } catch (error) {
         console.error("Error sending message:", error);
       }
-    };
+    
   };
 
   return { getUserDetails };
