@@ -9,11 +9,18 @@ import Warn from "../components/Warn";
 import baseStore from "../store/baseStore";
 
 const Page = () => {
-  const { isCountDown, isThumbActive,isWarningActive } = baseStore((state) => state);
+  const { isCountDown, isThumbActive, isWarningActive } = baseStore(
+    (state) => state
+  );
 
   return (
     <div className="h-screen overflow-hidden relative">
-     {isWarningActive && <Warn warningTitle="We See more than 1 face!" warningSubTitle="We request you to stand individually" />}
+      {isWarningActive && (
+        <Warn
+          warningTitle="We See more than 1 face!"
+          warningSubTitle="We request you to stand individually"
+        />
+      )}
       <FilterBg />
       <div className="relative z-10">
         {isThumbActive && <ThumbsUp />}
