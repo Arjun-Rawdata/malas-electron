@@ -11,6 +11,7 @@ import Scanner from "./pages/Scanner";
 import Tips from "./pages/Tips";
 import { useEffect } from "react";
 import { CameraKit } from "./utils/CameraKitContext";
+import UserActivityTracker from "./components/IdleTimer";
 
 function App() {
   useEffect(() => {
@@ -54,6 +55,7 @@ function App() {
         <div className="grid place-items-center scale-[45%] h-full absolute">
           <div className="w-[1080px] h-[1920px] border border-primary bg-primary-white relative">
             <Router>
+              <UserActivityTracker />
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/register" element={<Register />} />

@@ -11,6 +11,8 @@ import baseStore from "../store/baseStore";
 function useDetectionService() {
   const { captureImage } = useCamCapture();
   const setIsWarningActive = baseStore((state) => state.setIsWarningActive);
+  const isUserPresent = baseStore((state) => state.isUserPresent);
+  const setIsUserPresent = baseStore((state) => state.setIsUserPresent);
   const visionRef = useRef<any>(null);
   const recognizerRef = useRef<GestureRecognizer | null>(null);
 
@@ -67,7 +69,6 @@ function useDetectionService() {
             detectedFaces.detections.length > 1
           ) {
             if (detectedFaces.detections[1].categories[0].score > 0.8) {
-              console.log("Multiple faces detected:", detectedFaces.detections);
               setIsWarningActive(true);
               setIsFaceDetected(false);
               setIsThumbUpDetected(false);
@@ -76,11 +77,18 @@ function useDetectionService() {
             if (detectedFaces.detections[0].categories[0].score > 0.8) {
               setIsWarningActive(false);
               setIsFaceDetected(true);
+
+              if (!isUserPresent) {
+                setIsUserPresent(true);
+              }
             }
           } else {
             setIsFaceDetected(false);
             setIsThumbUpDetected(false);
             console.log("no face detected");
+            if (isUserPresent) {
+              setIsUserPresent(false);
+            }
           }
 
           lastVideoTime = currentTime;
@@ -116,7 +124,7 @@ function useDetectionService() {
         let lastTimestamp = 0;
 
         function assignTimestamp() {
-          const currentTimestamp = performance.now(); // or video.currentTime * 1000
+          const currentTimestamp = performance.now();
           if (currentTimestamp <= lastTimestamp) {
             lastTimestamp += 1; // Increment by 1ms if timestamps are stagnant
           } else {
@@ -128,9 +136,6 @@ function useDetectionService() {
         const timestamp = assignTimestamp();
 
         if (video && recognizerRef.current) {
-          // const currentTime = video.currentTime;
-          // const timestamp = currentTime * 1000;
-
           const result = recognizerRef.current.recognizeForVideo(
             video,
             timestamp
@@ -164,11 +169,10 @@ function useDetectionService() {
     if (isFaceDetected && isThumbUpDetected) {
       console.log("capturing...");
       captureImage(canvasRef, videoRef);
-      setTimeout(()=>{
-
+      setTimeout(() => {
         setIsThumbUpDetected(false);
         setIsFaceDetected(false);
-      },6000)
+      }, 6000);
     } else {
       setIsThumbUpDetected(false);
     }
