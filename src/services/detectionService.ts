@@ -43,7 +43,7 @@ function useDetectionService() {
     };
   }, []);
 
-  const faceDetector = async (videoRef: React.RefObject<HTMLVideoElement>) => {
+  const faceDetector = async () => {
     if (!visionRef.current) return;
     let lastVideoTime = -1;
     const detector = await FaceDetector.createFromOptions(visionRef.current, {
@@ -126,7 +126,7 @@ function useDetectionService() {
         function assignTimestamp() {
           const currentTimestamp = performance.now();
           if (currentTimestamp <= lastTimestamp) {
-            lastTimestamp += 1; // Increment by 1ms if timestamps are stagnant
+            lastTimestamp += 1; 
           } else {
             lastTimestamp = currentTimestamp;
           }

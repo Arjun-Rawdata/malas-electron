@@ -1,4 +1,5 @@
 import baseStore from "@/store/baseStore";
+import resetApp from "@/utils/appResetter";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -11,12 +12,15 @@ const UserActivityTracker: React.FC = () => {
   let activityTimeout: NodeJS.Timeout;
 
   const resetActivityTimer = () => {
+    console.log("resetting >>>>>>.");
+
     setIsUserActive(true);
     clearTimeout(activityTimeout);
     activityTimeout = setTimeout(() => setIsUserActive(false), 15000);
   };
 
   useEffect(() => {
+    console.log("useffect working");
     const handleActivity = () => resetActivityTimer();
 
     window.addEventListener("mousemove", handleActivity);
@@ -31,21 +35,26 @@ const UserActivityTracker: React.FC = () => {
       window.removeEventListener("keydown", handleActivity);
       window.removeEventListener("click", handleActivity);
       window.removeEventListener("scroll", handleActivity);
-      setIsUserPresent(true);
+
       clearTimeout(activityTimeout);
     };
-  }, [location, isUserPresent]);
+  }, [location]);
 
+  // Conditional redirection logic
   useEffect(() => {
     const pathname = location.pathname;
-    
-    if (!isUserActive && pathname !== "/" && pathname !== "/filters") {
-      navigate("/");
+    if (location.pathname !== "/") {
+      if (pathname === "/filters") {
+        if (!isUserActive && !isUserPresent) {
+          resetApp();
+        }
+      } else {
+        if (!isUserActive) {
+          resetApp();
+        }
+      }
     }
-    if (pathname == "/filters" && !isUserActive && !isUserPresent) {
-      navigate("/");
-    }
-  }, [isUserActive, isUserPresent]);
+  }, [isUserActive, isUserPresent, location.pathname, navigate]);
 
   return null;
 };
