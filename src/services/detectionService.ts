@@ -147,6 +147,7 @@ function useDetectionService() {
                 if (gesture.categoryName === "Thumb_Up") {
                   console.log("Thumbs up detected!");
                   if (isThumbUpDetected == false) {
+                    setIsUserPresent(true)
                     setIsThumbUpDetected(true);
                   }
                 } else {
@@ -167,7 +168,7 @@ function useDetectionService() {
 
   useEffect(() => {
     if (isFaceDetected && isThumbUpDetected) {
-      console.log("capturing...");
+
       captureImage(canvasRef, videoRef);
       setTimeout(() => {
         setIsThumbUpDetected(false);

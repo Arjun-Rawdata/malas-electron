@@ -43,7 +43,7 @@ const UserActivityTracker: React.FC = () => {
   // Conditional redirection logic
   useEffect(() => {
     const pathname = location.pathname;
-    if (location.pathname !== "/") {
+    if (location.pathname !== "/" && location.pathname !=='/preview' ) {
       if (pathname === "/filters") {
         if (!isUserActive && !isUserPresent) {
           resetApp();
