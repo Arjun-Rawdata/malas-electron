@@ -16,7 +16,7 @@ function useUserCrudService() {
       try {
         const data = await userCrudApi("post", Number(qrCode), scannerId);
         console.log(data);
-
+      
         // const userDat = data?.data?.[0];
         // if (!fruits.includes(userDat?.fruit)) {
         //   setIsScanError();

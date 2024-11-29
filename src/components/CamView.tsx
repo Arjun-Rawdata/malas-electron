@@ -26,7 +26,7 @@ function CamView() {
       if (videoRef.current) {
         videoRef.current.srcObject = stream as MediaProvider;
 
-        faceDetector(videoRef).then((intervalId) => {
+        faceDetector().then((intervalId) => {
           faceiIntervalId = intervalId as NodeJS.Timeout;
         });
         gestureDetector(videoRef).then((intervalId) => {
