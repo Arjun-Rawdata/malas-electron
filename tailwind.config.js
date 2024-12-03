@@ -43,7 +43,7 @@ const config = {
       },
       fontFamily: {
         afacadFlux: ["var(--font-afacadflux)", "sans-serif"],
-        notoSerif: ['"Noto Serif"', ...defaultTheme.fontFamily.serif],
+        notoSerif: ['"NotoSerif"', ...defaultTheme.fontFamily.serif],
         serenity: ['"Serenity"', ...defaultTheme.fontFamily.sans],
         "serenity-thin": ['"Serenity-Thin"', ...defaultTheme.fontFamily.sans],
       },
