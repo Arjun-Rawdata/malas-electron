@@ -3,19 +3,19 @@ import LogoHeader from "../components/LogoHeader";
 import { icon } from "../utils/assets";
 import { useEffect, useState } from "react";
 import themeStore from "../store/themeStore";
-import userStore from "../store/userStore";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import Warn from "../components/Warn";
-import { userCrudApi } from "@/api/userCrudApi";
 import useUserCrudService from "@/services/userCrudService";
+import baseStore from "@/store/baseStore";
 
 const Page = () => {
   const [qrCode, setQrCode] = useState<string | null>(null);
   const navigate = useNavigate();
-  const fruits = ["kiwi", "strawberry", "mango", "orange"];
+
   const [isScanErr, setIsScanErr] = useState(false);
   const { getUserDetails } = useUserCrudService();
+  // const isWarningActive = baseStore((state) => state.isWarningActive);
 
   useEffect(() => {
     const socket = io("ws://localhost:3001", {
@@ -44,10 +44,10 @@ const Page = () => {
     return () => {
       socket.disconnect();
     };
-  }, [qrCode]);
+  }, []);
 
   useEffect(() => {
-    getUserDetails(qrCode as string, 101);
+    getUserDetails('222222' as string, '101');
   }, [qrCode]);
 
   const setIsScanError = () => {
@@ -105,7 +105,7 @@ const Page = () => {
           src={icon("machineIllustrate")}
         />
       </div>
-      {isScanErr && <Warn warningSubTitle="Please scan again" />}
+      {/* {isWarningActive && <Warn warningSubTitle="Please scan again" />} */}
     </div>
   );
 };

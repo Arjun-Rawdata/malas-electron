@@ -4,10 +4,11 @@ import themeStore from "../store/themeStore";
 import { cn } from "../utils/cn";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-
+import useCamCapture from "@/services/camCapture";
 interface FilterButton {
   image: string;
   key: number;
+  snapIndex: number;
 }
 
 type Buttons = {
@@ -19,6 +20,7 @@ type BtnColor = {
 };
 
 export default function FillAnimate() {
+  // const { lensApplicator } = useCamCapture();
   const theme = themeStore((state) => state.theme) as keyof Buttons;
   const { isAllLoaded, handleImageLoad } = useImageLoader(2);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
@@ -27,72 +29,88 @@ export default function FillAnimate() {
       {
         image: "strawRingCrown",
         key: 1,
+        snapIndex: 1,
       },
       {
         image: "strawCrown",
         key: 2,
+        snapIndex: 0,
       },
       {
         image: "strawGlasses",
         key: 3,
+        snapIndex: 0,
       },
       {
         image: "strawRingCrown",
         key: 4,
+        snapIndex: 1,
       },
     ],
     mango: [
       {
         image: "mangoFace",
         key: 1,
+        snapIndex: 0,
       },
       {
         image: "mangoHat",
         key: 2,
+        snapIndex: 1,
       },
       {
         image: "mangoCrown",
         key: 3,
+        snapIndex: 0,
       },
       {
         image: "mangoFace",
         key: 4,
+        snapIndex: 1,
       },
     ],
     kiwi: [
       {
         image: "kiwiGlasses",
         key: 1,
+        snapIndex: 0,
       },
       {
         image: "kiwiFace",
         key: 2,
+        snapIndex: 1,
       },
       {
         image: "kiwiCrown",
         key: 3,
+        snapIndex: 0,
       },
       {
         image: "kiwiGlasses",
         key: 4,
+        snapIndex: 1,
       },
     ],
     orange: [
       {
         image: "orangeGlasses",
         key: 1,
+        snapIndex: 0,
       },
       {
         image: "orangeCrown",
         key: 2,
+        snapIndex: 1,
       },
       {
         image: "orangeRingCrown",
         key: 3,
+        snapIndex: 0,
       },
       {
         image: "orangeGlasses",
         key: 4,
+        snapIndex: 1,
       },
     ],
   });
@@ -149,6 +167,17 @@ export default function FillAnimate() {
     },
   ];
 
+  // useEffect(() => {
+  //   const currentSnapIndex = buttons[theme].find(
+  //     (filters) => filters.key == 4
+  //   )?.snapIndex;
+  //   if (currentSnapIndex) {
+  //     console.log("snap index>>>", currentSnapIndex);
+
+  //     lensApplicator(currentSnapIndex);
+  //   }
+  // }, [buttons]);
+
   const handleRotate = () => {
     setAction((prev) => prev + 90);
     setButtons((prev) => {
@@ -162,7 +191,15 @@ export default function FillAnimate() {
           };
         });
       });
-
+       
+      const currentSnapIndex = buttons[theme].find(
+        (filters) => filters.key == 4
+      )?.snapIndex;
+      if (currentSnapIndex) {
+        console.log("snap index>>>", currentSnapIndex);
+  
+        // lensApplicator(currentSnapIndex);
+      }
       return updated;
     });
   };
@@ -173,13 +210,22 @@ export default function FillAnimate() {
       const updated = { ...prev };
 
       Object.keys(updated).forEach((theme) => {
-        updated[theme] = updated[theme].map((item, index) => {
+        updated[theme] = updated[theme].map((item) => {
           return {
             ...item,
             key: item.key == 1 ? 4 : item.key - 1,
           };
         });
       });
+
+      const currentSnapIndex = buttons[theme].find(
+        (filters) => filters.key == 4
+      )?.snapIndex;
+      if (currentSnapIndex) {
+        console.log("snap index>>>", currentSnapIndex);
+  
+        // lensApplicator(currentSnapIndex);
+      }
 
       return updated;
     });
@@ -220,7 +266,7 @@ export default function FillAnimate() {
                 scale: { duration: filterBtn.key == 4 ? 1 : 0.3, delay: 0.2 },
               }}
               onClick={() => {
-                console.log("filterBtn.key", index);
+                console.log(filterBtn.key, index);
               }}
             >
               <motion.div

@@ -1,16 +1,8 @@
+import { User } from "@/utils/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface User {
-  name: string;
-  age: string;
-  gender: string;
-  fruit: string;
-  email: string;
-  mob: string;
-  scanner_id: string;
-  qrcode: string;
-}
+
 
 interface UserState {
   user: User | null;

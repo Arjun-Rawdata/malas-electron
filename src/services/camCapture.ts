@@ -23,15 +23,22 @@ function useCamCapture() {
       session.output.live.className =
         "border w-[899px] h-[947px] object-cover rounded-custom-x-large shadow-md mb-4   n";
       session.setSource(source);
-      if (lenses.length > 0) {
-        console.log("lenses in comp>>", lenses);
 
-        session.applyLens(lenses[0]);
-      }
+      // lensApplicator(0);
+
+      session.applyLens(lenses[0]);
 
       session.play("live");
     }
   }, [session, lenses]);
+
+  // const lensApplicator = (lensIndex: number) => {
+  //   if (lenses.length > 0) {
+  //     console.log("lenses in comp>>", lenses);
+
+  //     session.applyLens(lenses[lensIndex]);
+  //   }
+  // };
 
   const startCamera = async (canvasRef: React.RefObject<HTMLCanvasElement>) => {
     try {
@@ -80,7 +87,7 @@ function useCamCapture() {
     [isWarningActive, setIsCountDown, addImage]
   );
 
-  return { startCamera, captureImage };
+  return { startCamera, captureImage,  };
 }
 
 export default useCamCapture;

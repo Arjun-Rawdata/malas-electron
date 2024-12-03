@@ -1,10 +1,9 @@
 import axios from "axios";
 
 export const request = axios.create({
-  baseURL: "https://b512-2401-4900-1cde-19f8-b984-be72-cc74-7d76.ngrok-free.app/API",
+  baseURL: "http://192.168.2.59:8000/API",
   headers: {
     "Content-Type": "application/json",
-    Origin: "http://localhost:5173",
   },
 });
 
