@@ -27,21 +27,21 @@ function useDetectionService() {
     canvasRef.current = newCanvasRef.current;
   };
 
-  // useEffect(() => {
-  //   const initializeVision = async () => {
-  //     const vision = await FilesetResolver.forVisionTasks(
-  //       "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
-  //     );
-  //     visionRef.current = vision;
-  //   };
+  useEffect(() => {
+    const initializeVision = async () => {
+      const vision = await FilesetResolver.forVisionTasks(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+      );
+      visionRef.current = vision;
+    };
 
-  //   initializeVision();
+    initializeVision();
 
-  //   return () => {
-  //     visionRef.current = null;
-  //     recognizerRef.current = null;
-  //   };
-  // }, []);
+    return () => {
+      visionRef.current = null;
+      recognizerRef.current = null;
+    };
+  }, []);
 
   const faceDetector = async () => {
     if (!visionRef.current) return;
