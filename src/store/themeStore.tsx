@@ -7,7 +7,7 @@ interface ThemeStore {
 
 const themeStore = create<ThemeStore>((set) => ({
   // strawberry, orange, kiwi, mango
-  theme: "strawberry",
+  theme: "mango",
   setTheme: (theme: string) => set({ theme }),
 }));
 
