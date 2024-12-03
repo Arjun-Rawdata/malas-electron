@@ -37,25 +37,25 @@ export default function FillAnimate() {
     ],
     mango: [
       {
-        image: "mangoFace",
+        image: "mangoCrown",
         key: 1,
       },
       {
-        image: "mangoHat",
+        image: "mangoFace",
         key: 2,
       },
       {
-        image: "mangoCrown",
+        image: "mangoFace",
         key: 3,
       },
       {
-        image: "mangoFace",
+        image: "mangoHat",
         key: 4,
       },
     ],
     kiwi: [
       {
-        image: "kiwiGlasses",
+        image: "kiwiCrown",
         key: 1,
       },
       {
@@ -63,29 +63,29 @@ export default function FillAnimate() {
         key: 2,
       },
       {
-        image: "kiwiCrown",
+        image: "kiwiGlasses",
         key: 3,
       },
       {
-        image: "kiwiGlasses",
+        image: "kiwiFace",
         key: 4,
       },
     ],
     orange: [
       {
-        image: "orangeGlasses",
+        image: "orangeRingCrown",
         key: 1,
       },
       {
-        image: "orangeCrown",
         key: 2,
-      },
-      {
-        image: "orangeRingCrown",
-        key: 3,
+        image: "orangeCrown",
       },
       {
         image: "orangeGlasses",
+        key: 3,
+      },
+      {
+        image: "orangeCrown",
         key: 4,
       },
     ],
