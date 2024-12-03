@@ -126,7 +126,7 @@ function useDetectionService() {
         function assignTimestamp() {
           const currentTimestamp = performance.now();
           if (currentTimestamp <= lastTimestamp) {
-            lastTimestamp += 1; 
+            lastTimestamp += 1;
           } else {
             lastTimestamp = currentTimestamp;
           }
@@ -147,7 +147,7 @@ function useDetectionService() {
                 if (gesture.categoryName === "Thumb_Up") {
                   console.log("Thumbs up detected!");
                   if (isThumbUpDetected == false) {
-                    setIsUserPresent(true)
+                    setIsUserPresent(true);
                     setIsThumbUpDetected(true);
                   }
                 } else {
@@ -168,7 +168,6 @@ function useDetectionService() {
 
   useEffect(() => {
     if (isFaceDetected && isThumbUpDetected) {
-
       captureImage(canvasRef, videoRef);
       setTimeout(() => {
         setIsThumbUpDetected(false);

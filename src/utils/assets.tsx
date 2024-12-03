@@ -48,18 +48,18 @@ import strawBg from "../assets/backgrounds/strawberry-bg.png";
 import mangoBg from "../assets/backgrounds/mango-bg.png";
 import orangeBg from "../assets/backgrounds/orange-bg.png";
 import kiwiBg from "../assets/backgrounds/kiwi-bg.png";
-import strawCrown from "../assets/filters/strawberry/crown.svg";
-import strawGlasses from "../assets/filters/strawberry/glasses.svg";
-import strawRingCrown from "../assets/filters/strawberry/ring-crown.svg";
-import mangoCrown from "../assets/filters/mango/crown.svg";
-import mangoHat from "../assets/filters/mango/hat.svg";
-import mangoFace from "../assets/filters/mango/mango-face.svg";
-import kiwiCrown from "../assets/filters/kiwi/crown.svg";
-import kiwiFace from "../assets/filters/kiwi/face-filter.svg";
-import kiwiGlasses from "../assets/filters/kiwi/glasses.svg";
-import orangeCrown from "../assets/filters/orange/crown.svg";
-import orangeGlasses from "../assets/filters/orange/glasses.svg";
-import orangeRingCrown from "../assets/filters/orange/ring-crown.svg";
+import strawCrown from "../assets/filters/strawberry/crown.png";
+import strawGlasses from "../assets/filters/strawberry/glasses.png";
+import strawRingCrown from "../assets/filters/strawberry/ring-crown.png";
+import mangoCrown from "../assets/filters/mango/crown.png";
+import mangoHat from "../assets/filters/mango/hat.png";
+import mangoFace from "../assets/filters/mango/mango-face.png";
+import kiwiCrown from "../assets/filters/kiwi/crown.png";
+import kiwiFace from "../assets/filters/kiwi/face-filter.png";
+import kiwiGlasses from "../assets/filters/kiwi/glasses.png";
+import orangeCrown from "../assets/filters/orange/crown.png";
+import orangeGlasses from "../assets/filters/orange/glasses.png";
+import orangeRingCrown from "../assets/filters/orange/ring-crown.png";
 
 const icon = (iconName: string): string => {
   const icons: { [key: string]: string } = {

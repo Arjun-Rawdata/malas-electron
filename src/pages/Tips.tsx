@@ -43,6 +43,7 @@ const Tips = () => {
                 image={icon(item.icon)}
                 text={item.text}
                 key={index}
+                icon={item.icon}
               />
             ))}
           </div>
