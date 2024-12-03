@@ -82,6 +82,17 @@ async function createWindow() {
 
   // Auto update
   update(win);
+
+  ipcMain.on("refresh-window", () => {
+    if (win) {
+      win.reload();
+    }
+  });
+  win.webContents.on("did-fail-load", () => {
+    if (win) {
+      win.loadFile(indexHtml); // Fall back to index.html if loading fails
+    }
+  });
 }
 
 app.whenReady().then(createWindow);
