@@ -16,8 +16,6 @@ type BtnColor = Record<string, string>;
 
 export default function FillAnimate() {
   const theme = themeStore((state) => state.theme) as keyof Buttons;
-  const { isAllLoaded, handleImageLoad } = useImageLoader(2);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [buttons, setButtons] = useState<Buttons>({
     strawberry: [
       {
@@ -177,6 +175,17 @@ export default function FillAnimate() {
                 { "w-[400px] h-[400px]": index === 4 },
                 { "scale-[0.95]": index !== 4 }
               )}
+              initial={{
+                translateX:
+                  filterBtn.key === 4
+                    ? elementsAlt[index].x
+                    : elements[index].x,
+                translateY:
+                  filterBtn.key === 4
+                    ? elementsAlt[index].y
+                    : elements[index].y,
+                scale: filterBtn.key === 4 ? 1.2 : 0.95,
+              }}
               animate={{
                 rotate: -action,
                 translateX:
@@ -211,7 +220,6 @@ export default function FillAnimate() {
                   src={filterIcons(filterBtn.image)}
                   alt="logo"
                   className="h-[200px] w-auto"
-                  onLoad={handleImageLoad}
                 />
               </motion.div>
             </motion.div>
