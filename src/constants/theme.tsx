@@ -1,6 +1,9 @@
 interface FruitNameMap {
   [key: string]: string;
 }
+interface FruitDesc {
+  [key: string]: React.ReactElement;
+}
 
 const fruitNames: FruitNameMap = {
   orange: "Oranges",
@@ -9,11 +12,23 @@ const fruitNames: FruitNameMap = {
   strawberry: "Strawberries",
 };
 
-const fruitDesc: FruitNameMap = {
-  orange: "You look like a bright, juicy",
-  mango: "You look like a Radiant Alphonso",
-  kiwi: "You look like a lively",
-  strawberry: "You look like a Sweet Charlie",
+const fruitDesc: FruitDesc = {
+  orange: <>You look like a bright, juicy</>,
+  mango: (
+    <>
+      You look like a Radiant <br /> Alphonso
+    </>
+  ),
+  kiwi: (
+    <>
+      You look like a <br /> lively
+    </>
+  ),
+  strawberry: (
+    <>
+      You look like a <br /> Sweet Charlie
+    </>
+  ),
 };
 
 export { fruitNames, fruitDesc };
