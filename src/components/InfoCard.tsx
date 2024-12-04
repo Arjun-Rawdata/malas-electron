@@ -1,10 +1,13 @@
+import { cn } from "@/utils/cn";
+
 type Props = {
   index: number;
   image: ImageData | string;
   text: JSX.Element;
+  icon: string;
 };
 
-function InfoCard({ index, image, text }: Props) {
+function InfoCard({ index, image, text, icon }: Props) {
   return (
     <div className="rounded-custom-large bg-primary-blue px-4 py-6 flex flex-col justify-evenly gap-2 h-[389px] text-5xl  text-primary-white">
       <div className="index-wrapper text-center">
@@ -12,7 +15,9 @@ function InfoCard({ index, image, text }: Props) {
       </div>
       <div className="w-full grid place-items-center">
         <img
-          className="w-[100px] h-[80px]"
+          className={cn("w-[100px] h-[80px]", {
+            "h-[100px]": icon == "printIcon",
+          })}
           alt="camera"
           src={image as string}
           width={100}

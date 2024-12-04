@@ -11,19 +11,13 @@ interface FilterButton {
   snapIndex: number;
 }
 
-type Buttons = {
-  [key: string]: FilterButton[];
-};
+type Buttons = Record<string, FilterButton[]>;
 
-type BtnColor = {
-  [key: string]: string;
-};
+type BtnColor = Record<string, string>;
 
 export default function FillAnimate() {
   // const { lensApplicator } = useCamCapture();
   const theme = themeStore((state) => state.theme) as keyof Buttons;
-  const { isAllLoaded, handleImageLoad } = useImageLoader(2);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [buttons, setButtons] = useState<Buttons>({
     strawberry: [
       {
@@ -42,36 +36,36 @@ export default function FillAnimate() {
         snapIndex: 0,
       },
       {
-        image: "strawRingCrown",
+        image: "strawCrown",
         key: 4,
         snapIndex: 1,
       },
     ],
     mango: [
       {
-        image: "mangoFace",
+        image: "mangoCrown",
         key: 1,
         snapIndex: 0,
       },
       {
-        image: "mangoHat",
+        image: "mangoFace",
         key: 2,
         snapIndex: 1,
       },
       {
-        image: "mangoCrown",
+        image: "mangoFace",
         key: 3,
         snapIndex: 0,
       },
       {
-        image: "mangoFace",
+        image: "mangoHat",
         key: 4,
         snapIndex: 1,
       },
     ],
     kiwi: [
       {
-        image: "kiwiGlasses",
+        image: "kiwiCrown",
         key: 1,
         snapIndex: 0,
       },
@@ -81,34 +75,33 @@ export default function FillAnimate() {
         snapIndex: 1,
       },
       {
-        image: "kiwiCrown",
+        image: "kiwiGlasses",
         key: 3,
         snapIndex: 0,
       },
       {
-        image: "kiwiGlasses",
+        image: "kiwiFace",
         key: 4,
         snapIndex: 1,
       },
     ],
     orange: [
       {
-        image: "orangeGlasses",
+        image: "orangeRingCrown",
         key: 1,
         snapIndex: 0,
       },
       {
-        image: "orangeCrown",
         key: 2,
-        snapIndex: 1,
+        image: "orangeCrown",
       },
       {
-        image: "orangeRingCrown",
+        image: "orangeGlasses",
         key: 3,
         snapIndex: 0,
       },
       {
-        image: "orangeGlasses",
+        image: "orangeCrown",
         key: 4,
         snapIndex: 1,
       },
@@ -130,103 +123,53 @@ export default function FillAnimate() {
   const [action, setAction] = useState(0);
 
   const elements = [
-    {
-      x: 500,
-      y: 0,
-    },
-    {
-      x: 0,
-      y: 500,
-    },
-    {
-      x: -500,
-      y: 0,
-    },
-    {
-      x: 0,
-      y: -500,
-    },
+    { x: 500, y: 0 },
+    { x: 0, y: 500 },
+    { x: -500, y: 0 },
+    { x: 0, y: -500 },
   ];
 
   const elementsAlt = [
-    {
-      x: 220,
-      y: 0,
-    },
-    {
-      x: 0,
-      y: 220,
-    },
-    {
-      x: -220,
-      y: 0,
-    },
-    {
-      x: 0,
-      y: -220,
-    },
+    { x: 220, y: 0 },
+    { x: 0, y: 220 },
+    { x: -220, y: 0 },
+    { x: 0, y: -220 },
   ];
 
-  // useEffect(() => {
-  //   const currentSnapIndex = buttons[theme].find(
-  //     (filters) => filters.key == 4
-  //   )?.snapIndex;
-  //   if (currentSnapIndex) {
-  //     console.log("snap index>>>", currentSnapIndex);
-
-  //     lensApplicator(currentSnapIndex);
-  //   }
-  // }, [buttons]);
-
-  const handleRotate = () => {
+  const handleRotate = (e: React.MouseEvent) => {
+    e.preventDefault();
     setAction((prev) => prev + 90);
     setButtons((prev) => {
       const updated = { ...prev };
-
       Object.keys(updated).forEach((theme) => {
-        updated[theme] = updated[theme].map((item, index) => {
-          return {
-            ...item,
-            key: item.key == 4 ? 1 : item.key + 1,
-          };
-        });
+        updated[theme] = updated[theme].map((item, index, arr) => ({
+          ...item,
+          key: item.key === 4 ? 1 : item.key + 1,
+          image:
+            item.key === 2
+              ? arr.find((ele) => ele.key === 1)?.image || item.image
+              : item.image,
+        }));
       });
-       
-      const currentSnapIndex = buttons[theme].find(
-        (filters) => filters.key == 4
-      )?.snapIndex;
-      if (currentSnapIndex) {
-        console.log("snap index>>>", currentSnapIndex);
-  
-        // lensApplicator(currentSnapIndex);
-      }
       return updated;
     });
   };
 
-  const handleRotateRev = () => {
+  const handleRotateRev = (e: React.MouseEvent) => {
+    e.preventDefault();
     setAction((prev) => prev - 90);
     setButtons((prev) => {
       const updated = { ...prev };
-
       Object.keys(updated).forEach((theme) => {
-        updated[theme] = updated[theme].map((item) => {
-          return {
-            ...item,
-            key: item.key == 1 ? 4 : item.key - 1,
-          };
-        });
+        updated[theme] = updated[theme].map((item, index, arr) => ({
+          ...item,
+          key: item.key === 1 ? 4 : item.key - 1,
+          image:
+            item.key === 2
+              ? arr.find((ele) => ele.key === 3)?.image || item.image
+              : item.image,
+        }));
       });
-
-      const currentSnapIndex = buttons[theme].find(
-        (filters) => filters.key == 4
-      )?.snapIndex;
-      if (currentSnapIndex) {
-        console.log("snap index>>>", currentSnapIndex);
-  
-        // lensApplicator(currentSnapIndex);
-      }
-
       return updated;
     });
   };
@@ -249,24 +192,39 @@ export default function FillAnimate() {
                 { "w-[400px] h-[400px]": index === 4 },
                 { "scale-[0.95]": index !== 4 }
               )}
+              initial={{
+                translateX:
+                  filterBtn.key === 4
+                    ? elementsAlt[index].x
+                    : elements[index].x,
+                translateY:
+                  filterBtn.key === 4
+                    ? elementsAlt[index].y
+                    : elements[index].y,
+                scale: filterBtn.key === 4 ? 1.2 : 0.95,
+              }}
               animate={{
                 rotate: -action,
                 translateX:
-                  filterBtn.key == 4 ? elementsAlt[index].x : elements[index].x,
+                  filterBtn.key === 4
+                    ? elementsAlt[index].x
+                    : elements[index].x,
                 translateY:
-                  filterBtn.key == 4 ? elementsAlt[index].y : elements[index].y,
-                scale: filterBtn.key == 4 ? 1.2 : 0.95,
+                  filterBtn.key === 4
+                    ? elementsAlt[index].y
+                    : elements[index].y,
+                scale: filterBtn.key === 4 ? 1.2 : 0.95,
                 transitionEnd: {
-                  scale: filterBtn.key == 4 ? 1.2 : 0.95,
+                  scale: filterBtn.key === 4 ? 1.2 : 0.95,
                 },
               }}
               transition={{
                 duration: 0.7,
                 boxShadow: { duration: 0 },
-                scale: { duration: filterBtn.key == 4 ? 1 : 0.3, delay: 0.2 },
+                scale: { duration: filterBtn.key === 4 ? 1 : 0.3, delay: 0.2 },
               }}
               onClick={() => {
-                console.log(filterBtn.key, index);
+                console.log("filterBtn.key", filterBtn.key, index);
               }}
             >
               <motion.div
@@ -278,7 +236,7 @@ export default function FillAnimate() {
                 <img
                   src={filterIcons(filterBtn.image)}
                   alt="logo"
-                  onLoad={handleImageLoad}
+                  className="h-[200px] w-auto"
                 />
               </motion.div>
             </motion.div>
@@ -286,12 +244,12 @@ export default function FillAnimate() {
         </motion.div>
         <motion.div
           style={{ translateX: elements[0].x }}
-          className="w-[289.68px] h-[289.68px] rounded-full absolute bg-green-300 opacity-0"
+          className="w-[289.68px] h-[289.68px] rounded-full absolute bg-green-300 opacity-0 z-10"
           onClick={handleRotateRev}
         ></motion.div>
         <motion.div
           style={{ translateX: elements[2].x }}
-          className="w-[289.68px] h-[289.68px] rounded-full absolute bg-green-300 opacity-0"
+          className="w-[289.68px] h-[289.68px] rounded-full absolute bg-green-300 opacity-0 z-10"
           onClick={handleRotate}
         ></motion.div>
       </div>
