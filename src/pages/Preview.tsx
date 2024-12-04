@@ -36,9 +36,9 @@ const Preview = () => {
         reverse={theme === "strawberry"}
       />
       <div className="w-full h-screen font-[400] text-lg flex flex-col gap-28 items-center justify-center">
-        <div className="w-6/12 text-pretty text-center text-primary">
-          {`${fruitDesc[theme]} `}
-          <span className={cn("capitalize", fruitColor[theme])}>{theme}</span>
+        <div className="w-9/12 text-pretty text-center text-primary">
+          {fruitDesc[theme]}
+          <span className={cn("capitalize", fruitColor[theme])}> {theme}</span>
         </div>
         <div className="h-[925px] w-[872px] border-[4px] border-primary rounded-[64px]">
           {!!images.length && (
