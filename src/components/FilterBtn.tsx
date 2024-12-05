@@ -1,6 +1,7 @@
 import { filterIcons } from "../utils/assets";
-import { useImageLoader } from "../hooks/useImageloader";
 import themeStore from "../store/themeStore";
+import filterStore from "../store/filterStore";
+
 import { cn } from "../utils/cn";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -8,6 +9,7 @@ import { useEffect, useState } from "react";
 interface FilterButton {
   image: string;
   key: number;
+  snapIndex: number;
 }
 
 type Buttons = Record<string, FilterButton[]>;
@@ -16,77 +18,95 @@ type BtnColor = Record<string, string>;
 
 export default function FillAnimate() {
   const theme = themeStore((state) => state.theme) as keyof Buttons;
+  const snapSession = filterStore((state) => state.session);
+  const snapLenses = filterStore((state) => state.lenses);
   const [buttons, setButtons] = useState<Buttons>({
     strawberry: [
       {
         image: "strawRingCrown",
         key: 1,
+        snapIndex: 1,
       },
       {
         image: "strawCrown",
         key: 2,
+        snapIndex: 0,
       },
       {
         image: "strawGlasses",
         key: 3,
+        snapIndex: 0,
       },
       {
         image: "strawCrown",
         key: 4,
+        snapIndex: 1,
       },
     ],
     mango: [
       {
         image: "mangoCrown",
         key: 1,
+        snapIndex: 0,
       },
       {
         image: "mangoFace",
         key: 2,
+        snapIndex: 1,
       },
       {
         image: "mangoFace",
         key: 3,
+        snapIndex: 0,
       },
       {
         image: "mangoHat",
         key: 4,
+        snapIndex: 1,
       },
     ],
     kiwi: [
       {
         image: "kiwiCrown",
         key: 1,
+        snapIndex: 0,
       },
       {
         image: "kiwiFace",
         key: 2,
+        snapIndex: 1,
       },
       {
         image: "kiwiGlasses",
         key: 3,
+        snapIndex: 0,
       },
       {
         image: "kiwiFace",
         key: 4,
+        snapIndex: 1,
       },
     ],
     orange: [
       {
         image: "orangeRingCrown",
         key: 1,
+        snapIndex: 0,
       },
       {
         key: 2,
         image: "orangeCrown",
+        snapIndex: 1,
       },
       {
         image: "orangeGlasses",
         key: 3,
+        snapIndex: 0,
       },
       {
         image: "orangeCrown",
         key: 4,
+        snapIndex: 1,
       },
     ],
   });
@@ -118,6 +138,26 @@ export default function FillAnimate() {
     { x: -220, y: 0 },
     { x: 0, y: -220 },
   ];
+  const lensApplicator = (lensIndex: number) => {
+    if (snapSession && snapLenses) {
+      console.log("applying lenses...");
+      snapSession.applyLens(snapLenses[lensIndex]);
+    }
+  };
+
+  useEffect(() => {
+    const snapIndex = buttons[theme].find(
+      (filters) => filters.key === 4
+    )?.snapIndex;
+
+    console.log(snapIndex);
+
+    if (snapIndex != null) {
+      lensApplicator(snapIndex);
+    }
+
+    return () => {};
+  }, [buttons]);
 
   const handleRotate = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -134,6 +174,7 @@ export default function FillAnimate() {
               : item.image,
         }));
       });
+
       return updated;
     });
   };
@@ -153,6 +194,7 @@ export default function FillAnimate() {
               : item.image,
         }));
       });
+
       return updated;
     });
   };

@@ -1,35 +1,53 @@
 import { userCrudApi } from "@/api/userCrudApi";
+import baseStore from "@/store/baseStore";
 import themeStore from "@/store/themeStore";
 import userStore from "@/store/userStore";
-import React from "react";
+import { crudApiResponse } from "@/utils/types";
 import { useNavigate } from "react-router-dom";
+
 function useUserCrudService() {
   const { setTheme } = themeStore((state) => state);
   const { setUser } = userStore((state) => state);
+  const setIsWarningActive = baseStore((state) => state.setIsWarningActive);
+  const navigate = useNavigate();
 
-  const getUserDetails = async (qrCode: string|number,scannerId:number) => {
-    
-      if (!qrCode) {
+  const fruits = ["kiwi", "strawberry", "mango", "orange"];
+  const getUserDetails = async (
+    qrCode: string,
+    scannerId: string,
+    setQrCode: React.Dispatch<React.SetStateAction<string | null>>,
+    setScanErr: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    if (qrCode == null) {
+      console.log("no qr code");
+
+      return;
+    }
+
+    try {
+      const data = (await userCrudApi(
+        "post",
+        qrCode,
+        scannerId
+      )) as crudApiResponse;
+      const userData = data.data;
+      console.log("user data >", data);
+
+      if (!fruits.includes(userData?.fruit)) {
+        setScanErr(true);
+        setTimeout(() => {
+          setScanErr(false);
+          setQrCode(null);
+        }, 3000);
         return;
       }
-
-      try {
-        const data = await userCrudApi("post", Number(qrCode), scannerId);
-        console.log(data);
-      
-        // const userDat = data?.data?.[0];
-        // if (!fruits.includes(userDat?.fruit)) {
-        //   setIsScanError();
-        //   return;
-        // }
-        // setUser({ ...userDat, qrcode: qrCode });
-        // setTheme(userDat?.fruit);
-        // console.log("userDat", userDat);
-        // navigate("/measures");
-      } catch (error) {
-        console.error("Error sending message:", error);
-      }
-    
+      setUser({ ...userData, qrcode: qrCode });
+      setTheme(userData?.fruit);
+      console.log("userData", userData);
+      navigate("/measures");
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   };
 
   return { getUserDetails };

@@ -5,12 +5,12 @@ import baseStore from "../store/baseStore";
 import { homeFruits, icon } from "../utils/assets";
 
 const Home = () => {
-  const { setIsThumbActive } = baseStore((state) => state);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    setIsThumbActive(true);
-  }, [setIsThumbActive]);
+   
+  }, []);
 
   return (
     <div className="relative h-full w-full">
