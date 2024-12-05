@@ -6,8 +6,8 @@ type HttpMethod = "get" | "post";
 export const userCrudApi = async <T>(
   method: HttpMethod,
 
-  qrCode: number,
-  scannerId: number
+  qrCode: string,
+  scannerId: string
 ): Promise<T> => {
   let url = "/get-malas-profile/";
   const params = {
@@ -17,18 +17,19 @@ export const userCrudApi = async <T>(
   try {
     let response: AxiosResponse<T> | null = null;
     if (method === "post") {
-      response = await request.post<T>(url, { params });
+      console.log(params);
+
+      response = await request.post<T>(url, params);
     }
 
     if (response === null) {
       throw new Error("Response is null");
     }
-    return response.data;
+    console.log(response);
+    
+    return response.data  ;
   } catch (error) {
     console.error(`Error in ${method.toUpperCase()} request to ${url}:`, error);
     throw error;
   }
 };
-
-
-
