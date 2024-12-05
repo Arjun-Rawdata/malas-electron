@@ -3,17 +3,21 @@ import baseStore from "@/store/baseStore";
 import themeStore from "@/store/themeStore";
 import userStore from "@/store/userStore";
 import { crudApiResponse } from "@/utils/types";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function useUserCrudService() {
   const { setTheme } = themeStore((state) => state);
   const { setUser } = userStore((state) => state);
   const setIsWarningActive = baseStore((state) => state.setIsWarningActive);
+  const navigate = useNavigate();
 
   const fruits = ["kiwi", "strawberry", "mango", "orange"];
-  const getUserDetails = async (qrCode: string, scannerId: string) => {
-    // const navigate = useNavigate();
-
+  const getUserDetails = async (
+    qrCode: string,
+    scannerId: string,
+    setQrCode: React.Dispatch<React.SetStateAction<string | null>>,
+    setScanErr: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
     if (qrCode == null) {
       console.log("no qr code");
 
@@ -30,13 +34,17 @@ function useUserCrudService() {
       console.log("user data >", data);
 
       if (!fruits.includes(userData?.fruit)) {
-        setIsWarningActive(true);
+        setScanErr(true);
+        setTimeout(() => {
+          setScanErr(false);
+          setQrCode(null);
+        }, 3000);
         return;
       }
-      // setUser({ ...userData, qrcode: qrCode });
-      // setTheme(userData?.fruit);
+      setUser({ ...userData, qrcode: qrCode });
+      setTheme(userData?.fruit);
       console.log("userData", userData);
-      // navigate("/measures");
+      navigate("/measures");
     } catch (error) {
       console.error("Error sending message:", error);
     }

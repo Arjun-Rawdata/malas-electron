@@ -47,16 +47,8 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    getUserDetails('111111' as string, '101');
-  }, []);
-
-  const setIsScanError = () => {
-    setIsScanErr(true);
-    setTimeout(() => {
-      setIsScanErr(false);
-      setQrCode(null);
-    }, 3000);
-  };
+    getUserDetails("111111", "101", setQrCode, setIsScanErr);
+  }, [qrCode]);
 
   return (
     <div>
@@ -105,7 +97,7 @@ const Page = () => {
           src={icon("machineIllustrate")}
         />
       </div>
-      {/* {isWarningActive && <Warn warningSubTitle="Please scan again" />} */}
+      {isScanErr && <Warn warningSubTitle="Please scan again" />}
     </div>
   );
 };

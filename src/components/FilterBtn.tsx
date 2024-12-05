@@ -1,12 +1,11 @@
 import { filterIcons } from "../utils/assets";
-import { useImageLoader } from "../hooks/useImageloader";
 import themeStore from "../store/themeStore";
 import filterStore from "../store/filterStore";
 
 import { cn } from "../utils/cn";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import useCamCapture from "@/services/camCapture";
+
 interface FilterButton {
   image: string;
   key: number;
@@ -18,7 +17,6 @@ type Buttons = Record<string, FilterButton[]>;
 type BtnColor = Record<string, string>;
 
 export default function FillAnimate() {
-  // const { lensApplicator } = useCamCapture();
   const theme = themeStore((state) => state.theme) as keyof Buttons;
   const snapSession = filterStore((state) => state.session);
   const snapLenses = filterStore((state) => state.lenses);
@@ -140,6 +138,12 @@ export default function FillAnimate() {
     { x: -220, y: 0 },
     { x: 0, y: -220 },
   ];
+  const lensApplicator = (lensIndex: number) => {
+    if (snapSession && snapLenses) {
+      console.log("applying lenses...");
+      snapSession.applyLens(snapLenses[lensIndex]);
+    }
+  };
 
   useEffect(() => {
     const snapIndex = buttons[theme].find(
@@ -173,13 +177,6 @@ export default function FillAnimate() {
 
       return updated;
     });
-  };
-  const lensApplicator = (lensIndex: number) => {
-    if (snapSession && snapLenses) {
-      console.log("applying lenses...");
-
-      snapSession.applyLens(snapLenses[lensIndex]);
-    }
   };
 
   const handleRotateRev = (e: React.MouseEvent) => {
