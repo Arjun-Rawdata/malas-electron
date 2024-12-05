@@ -47,8 +47,8 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    getUserDetails('222222' as string, '101');
-  }, [qrCode]);
+    getUserDetails('111111' as string, '101');
+  }, []);
 
   const setIsScanError = () => {
     setIsScanErr(true);

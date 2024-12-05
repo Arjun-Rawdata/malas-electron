@@ -1,7 +1,9 @@
 import { useContext } from "react";
 import { CameraKitContext } from "../utils/CameraKitContext";
+import filterStore from "@/store/filterStore";
 
 export const useCameraKit = () => {
+
   const state = useContext(CameraKitContext);
 
   if (!state) {

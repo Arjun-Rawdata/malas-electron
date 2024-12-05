@@ -1,6 +1,8 @@
 import { filterIcons } from "../utils/assets";
 import { useImageLoader } from "../hooks/useImageloader";
 import themeStore from "../store/themeStore";
+import filterStore from "../store/filterStore";
+
 import { cn } from "../utils/cn";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -18,6 +20,8 @@ type BtnColor = Record<string, string>;
 export default function FillAnimate() {
   // const { lensApplicator } = useCamCapture();
   const theme = themeStore((state) => state.theme) as keyof Buttons;
+  const snapSession = filterStore((state) => state.session);
+  const snapLenses = filterStore((state) => state.lenses);
   const [buttons, setButtons] = useState<Buttons>({
     strawberry: [
       {
@@ -94,6 +98,7 @@ export default function FillAnimate() {
       {
         key: 2,
         image: "orangeCrown",
+        snapIndex: 1,
       },
       {
         image: "orangeGlasses",
@@ -136,6 +141,20 @@ export default function FillAnimate() {
     { x: 0, y: -220 },
   ];
 
+  useEffect(() => {
+    const snapIndex = buttons[theme].find(
+      (filters) => filters.key === 4
+    )?.snapIndex;
+
+    console.log(snapIndex);
+
+    if (snapIndex != null) {
+      lensApplicator(snapIndex);
+    }
+
+    return () => {};
+  }, [buttons]);
+
   const handleRotate = (e: React.MouseEvent) => {
     e.preventDefault();
     setAction((prev) => prev + 90);
@@ -151,8 +170,16 @@ export default function FillAnimate() {
               : item.image,
         }));
       });
+
       return updated;
     });
+  };
+  const lensApplicator = (lensIndex: number) => {
+    if (snapSession && snapLenses) {
+      console.log("applying lenses...");
+
+      snapSession.applyLens(snapLenses[lensIndex]);
+    }
   };
 
   const handleRotateRev = (e: React.MouseEvent) => {
@@ -170,6 +197,7 @@ export default function FillAnimate() {
               : item.image,
         }));
       });
+
       return updated;
     });
   };

@@ -1,4 +1,5 @@
 import baseStore from "../store/baseStore";
+import filterStore from "@/store/filterStore"; "../store/filterStore";
 import userStore from "../store/userStore";
 import { useCallback } from "react";
 import { useCameraKit } from "../hooks/useCameraKit";
@@ -20,26 +21,30 @@ function useCamCapture() {
         transform: Transform2D.MirrorX,
       });
 
-      session.output.live.className =
-        "border w-[899px] h-[947px] object-cover rounded-custom-x-large shadow-md mb-4   n";
-      session.setSource(source);
-      if (lenses.length > 0) {
-        console.log("lenses in comp>>", lenses);
+      if (session) {
+        session.output.live.className =
+          "border w-[899px] h-[947px] object-cover rounded-custom-x-large shadow-md mb-4   n";
+        session.setSource(source);
+        if (lenses && lenses.length > 0) {
+          console.log("lenses in comp>>", lenses);
 
-        session.applyLens(lenses[0]);
+          session.applyLens(lenses[0]);
+        }
+
+        session.play("live");
       }
-
-      session.play("live");
     }
   }, [session, lenses]);
 
   const startCamera = async (canvasRef: React.RefObject<HTMLCanvasElement>) => {
     try {
       await startCameraKit();
-      const liveVideo = session.output.live;
+      if (session) {
+        const liveVideo = session.output.live;
 
-      canvasRef.current?.replaceWith(liveVideo);
-      return liveVideo.captureStream();
+        canvasRef.current?.replaceWith(liveVideo);
+        return liveVideo.captureStream();
+      }
     } catch (error) {}
   };
 
