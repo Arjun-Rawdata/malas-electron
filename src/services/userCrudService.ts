@@ -13,7 +13,7 @@ function useUserCrudService() {
 
   const fruits = ["kiwi", "strawberry", "mango", "orange"];
   const getUserDetails = async (
-    qrCode: string,
+    qrCode: string | null,
     scannerId: string,
     setQrCode: React.Dispatch<React.SetStateAction<string | null>>,
     setScanErr: React.Dispatch<React.SetStateAction<boolean>>
