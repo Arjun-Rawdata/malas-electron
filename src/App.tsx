@@ -57,7 +57,7 @@ function App() {
           <div className="w-[1080px] h-[1920px] border border-primary bg-primary-white relative">
             <Router>
               <UserActivityTracker />
-              <OfflineDetector />
+              {/* <OfflineDetector /> */}
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/register" element={<Register />} />
