@@ -50,10 +50,11 @@ const Print = () => {
         {images &&
           images.length > 0 &&
           images.map((url, index) => (
-            <div className="flex flex-col px-6 items-center gap-8" key={index}>
-              <img src={numIcons[index]} alt="numbers" />
+            <div className="flex flex-col px-6 items-center gap-8" key={url}>
+              <img key={url} src={numIcons[index]} alt="numbers" />
               <img
                 src={url}
+                key={url}
                 width={360}
                 height={380}
                 alt={`Captured ${index + 1}`}

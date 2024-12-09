@@ -9,6 +9,7 @@ function useCamCapture() {
   const addImage = userStore((state) => state.addImage);
   const setIsCountDown = baseStore((state) => state.setIsCountDown);
   const isWarningActive = baseStore((state) => state.isWarningActive);
+  const setErrorTrigger = baseStore((state) => state.setErrorTrigger);
   const session = filterStore((state) => state.session);
   const lenses = filterStore((state) => state.lenses);
 
@@ -23,16 +24,20 @@ function useCamCapture() {
       });
 
       if (session) {
-        session.output.live.className =
-          "border w-[899px] h-[947px] object-cover rounded-custom-x-large shadow-md mb-4   n";
-        session.setSource(source);
-        if (lenses && lenses.length > 0) {
-          console.log("lenses in comp>>", lenses);
+        try {
+          session.output.live.className =
+            "border w-[899px] h-[947px] object-cover rounded-custom-x-large shadow-md mb-4   n";
+          session.setSource(source);
+          if (lenses && lenses.length > 0) {
+            console.log("lenses in comp>>", lenses);
+            session.applyLens(lenses[0]);
+          }
 
-          session.applyLens(lenses[0]);
+          session.play("live");
+        } catch (error) {
+          console.log("error", error);
+          setErrorTrigger("default");
         }
-
-        session.play("live");
       }
     }
   }, [session, lenses]);
