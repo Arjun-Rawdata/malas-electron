@@ -1,6 +1,6 @@
 const PageLoading = () => {
   return (
-    <div className="absolute h-screen top-0 w-full bg-primary-white grid place-items-center z-20">
+    <div className="absolute h-[100%] top-0 w-full bg-primary-white grid place-items-center z-20">
       <div role="status">
         <svg
           aria-hidden="true"

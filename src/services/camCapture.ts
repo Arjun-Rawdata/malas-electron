@@ -1,14 +1,16 @@
 import baseStore from "../store/baseStore";  
 import userStore from "../store/userStore";
 import { useCallback } from "react";
-import { useCameraKit } from "../hooks/useCameraKit";
 import { createMediaStreamSource, Transform2D } from "@snap/camera-kit";
+import filterStore from "../store/filterStore";
 
 function useCamCapture() {
-  const { session, lenses } = useCameraKit();
+ 
   const addImage = userStore((state) => state.addImage);
   const setIsCountDown = baseStore((state) => state.setIsCountDown);
   const isWarningActive = baseStore((state) => state.isWarningActive);
+  const session = filterStore((state) => state.session);
+  const lenses = filterStore((state) => state.lenses);
 
   const startCameraKit = useCallback(async () => {
     if (window.navigator != null) {
