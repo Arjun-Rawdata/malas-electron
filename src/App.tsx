@@ -24,7 +24,7 @@ function App() {
             <Router>
               <ErrorWrapper />
               <CameraKit>
-                {/* <UserActivityTracker /> */}
+                <UserActivityTracker />
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/register" element={<Register />} />
