@@ -8,6 +8,7 @@ import { io } from "socket.io-client";
 import Warn from "../components/Warn";
 import useUserCrudService from "@/services/userCrudService";
 import baseStore from "@/store/baseStore";
+import useWebSocket from "react-use-websocket";
 
 const Page = () => {
   const [qrCode, setQrCode] = useState<string | null>(null);
@@ -16,38 +17,29 @@ const Page = () => {
   const [isScanErr, setIsScanErr] = useState(false);
   const { getUserDetails } = useUserCrudService();
   // const isWarningActive = baseStore((state) => state.isWarningActive);
+  const socketUrl = "ws://192.168.2.59:5000/ws/get-qr-data/?gameId=1";
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+    onOpen: () => console.log("WebSocket connected"),
+    onClose: () => console.log("WebSocket disconnected"),
+    onError: (error) => console.error("WebSocket error:", error),
+    shouldReconnect: (closeEvent) => true,
+  });
 
   useEffect(() => {
-    const socket = io("ws://localhost:3001", {
-      transports: ["websocket"],
-    });
-
-    socket.on("connect", () => {
-      console.log("Socket.IO connected via WebSocket");
-    });
-
-    socket.on("message", (data) => {
+    if (lastMessage) {
+      const { data } = lastMessage;
+      const recievedQr = JSON.parse(data)?.qrcode;
+      if (!recievedQr) return;
       if (data === qrCode) {
         return;
       }
-      setQrCode(data);
-    });
-
-    socket.on("disconnect", () => {
-      console.log("Socket.IO disconnected");
-    });
-
-    socket.on("error", (error) => {
-      console.error("Socket.IO error:", error);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+      setQrCode(recievedQr);
+    }
+  }, [lastMessage]);
 
   useEffect(() => {
-    getUserDetails("111111", "101", setQrCode, setIsScanErr);
+    getUserDetails(qrCode, "101", setQrCode, setIsScanErr);
   }, [qrCode]);
 
   return (

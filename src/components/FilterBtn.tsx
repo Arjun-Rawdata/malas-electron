@@ -5,6 +5,7 @@ import filterStore from "../store/filterStore";
 import { cn } from "../utils/cn";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import baseStore from "@/store/baseStore";
 
 interface FilterButton {
   image: string;
@@ -20,6 +21,8 @@ export default function FillAnimate() {
   const theme = themeStore((state) => state.theme) as keyof Buttons;
   const snapSession = filterStore((state) => state.session);
   const snapLenses = filterStore((state) => state.lenses);
+  const { setErrorTrigger } = baseStore((state) => state);
+
   const [buttons, setButtons] = useState<Buttons>({
     strawberry: [
       {
@@ -141,7 +144,12 @@ export default function FillAnimate() {
   const lensApplicator = (lensIndex: number) => {
     if (snapSession && snapLenses) {
       console.log("applying lenses...");
-      snapSession.applyLens(snapLenses[lensIndex]);
+      try {
+        snapSession.applyLens(snapLenses[lensIndex]);
+      } catch (error) {
+        console.log("error", error);
+        setErrorTrigger("default");
+      }
     }
   };
 
