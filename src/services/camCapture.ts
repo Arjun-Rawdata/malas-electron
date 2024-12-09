@@ -1,5 +1,5 @@
 import baseStore from "../store/baseStore";
-import filterStore from "@/store/filterStore"; "../store/filterStore";
+("../store/filterStore");
 import userStore from "../store/userStore";
 import { useCallback } from "react";
 import { useCameraKit } from "../hooks/useCameraKit";
@@ -9,7 +9,7 @@ function useCamCapture() {
   const { session, lenses } = useCameraKit();
   const addImage = userStore((state) => state.addImage);
   const setIsCountDown = baseStore((state) => state.setIsCountDown);
-  const isWarningActive = baseStore((state) => state.isWarningActive);
+  const { isWarningActive, setErrorTrigger } = baseStore((state) => state);
 
   const startCameraKit = useCallback(async () => {
     if (window.navigator != null) {
@@ -22,16 +22,20 @@ function useCamCapture() {
       });
 
       if (session) {
-        session.output.live.className =
-          "border w-[899px] h-[947px] object-cover rounded-custom-x-large shadow-md mb-4   n";
-        session.setSource(source);
-        if (lenses && lenses.length > 0) {
-          console.log("lenses in comp>>", lenses);
+        try {
+          session.output.live.className =
+            "border w-[899px] h-[947px] object-cover rounded-custom-x-large shadow-md mb-4   n";
+          session.setSource(source);
+          if (lenses && lenses.length > 0) {
+            console.log("lenses in comp>>", lenses);
+            session.applyLens(lenses[0]);
+          }
 
-          session.applyLens(lenses[0]);
+          session.play("live");
+        } catch (error) {
+          console.log("error", error);
+          setErrorTrigger("default");
         }
-
-        session.play("live");
       }
     }
   }, [session, lenses]);

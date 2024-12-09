@@ -12,9 +12,7 @@ request.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) {
-      console.log("NOT FOUND >>>", error);
-    }
+    console.log(error, "---------------");
 
     return Promise.reject(error);
   }
