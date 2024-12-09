@@ -23,7 +23,7 @@ const CountDown = () => {
   }, [navigate, setIsCountDown]);
 
   return (
-    <div className="absolute z-50 h-screen w-base bg-[#171717]/70 grid place-items-center">
+    <div className="pointer-events-none fixed z-[500] h-screen w-base bg-[#171717]/70 grid place-items-center">
       <p className="font-[700] text-[990.97px] text-white">{count}</p>
     </div>
   );

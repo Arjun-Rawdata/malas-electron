@@ -3,6 +3,7 @@ import { createContext, useEffect, useRef, useState } from "react";
 import { CameraKitState } from "./types";
 import filterStore from "@/store/filterStore";
 import baseStore from "@/store/baseStore";
+import PageLoading from "@/components/PageLoading";
 
 const apiToken = import.meta.env.VITE_PUBLIC_CAMERA_KIT_API_KEY;
 const lensGroupId = "a21f42e4-3c9d-4f0f-9ed2-6205c1aa1ea6";
@@ -50,7 +51,9 @@ export const CameraKit: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   return !session ? (
-    <div>Initializing...</div>
+    <div>
+      <PageLoading />
+    </div>
   ) : (
     <CameraKitContext.Provider value={{ session, lenses }}>
       {children}
