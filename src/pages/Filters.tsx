@@ -25,9 +25,11 @@ const Page = () => {
       <div className="relative z-10">
         {isThumbActive && <ThumbsUp />}
         {isCountDown && <CountDown />}
-        <div className="w-full h-full  flex pt-[250px] px-[98px] justify-center">
-          <CamView />
-        </div>
+        {!isThumbActive && (
+          <div className="w-full h-full  flex pt-[250px] px-[98px] justify-center">
+            <CamView />
+          </div>
+        )}
       </div>
       <FilterButtonBg />
       <FilterBtn />
